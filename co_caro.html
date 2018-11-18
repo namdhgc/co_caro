@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Game cờ caro</title>
+	</head>
+
+	<style>
+
+		.cell {
+			width: 50px;
+			height: 50px;
+			/*background-color: red*/
+		}
+	</style>
+
+	<body>
+		<div id="root"></div>
+	</body>
+
+	<script type="text/javascript" src="jquery.min.js"></script>
+	<script type="text/javascript">
+		const width = 3;
+		let current_player = 1;
+		check_winner = function(board, current_position) {
+			let x = parseInt(current_position["x"]);
+			let y = parseInt(current_position["y"]);
+
+			if (check_diagonal_line_winner(board, x, y)) {
+				alert("Player " + current_player + " win!")
+			}
+			// if (check_straight_line_winner(board, current_position) || check_diagonal_line_winner(board, current_position)) {
+			// 	alert('win');
+			// }
+
+		}
+
+		check_straight_line_winner = function(board, x, y) {
+			// check theo duong thang
+			let flag = false;
+
+			if (board[x][y] == board[x][y+1] && board[x][y] == board[x][y+2]
+				|| board[x][y] == board[x][y-1] && board[x][y] == board[x][y+1]
+				|| board[x][y] == board[x][y-1] && board[x][y] == board[x][y-2]
+				) {
+				flag = true;
+			}
+
+			return flag;
+		}
+
+		check_diagonal_line_winner = function(board, x, y) {
+			// check theo duong cheo
+			let flag = false;
+			console.log("===========================")
+			console.log(board)
+			console.log(x)
+			console.log(y)
+
+			if ((x + 2) <= width) {
+				if (board[x][y] == board[x+1][y] && board[x][y] == board[x+2][y]) {
+					flag = true;
+				}
+			}
+
+			if ((x - 1) >= 0 && (x + 1) <= width) {
+				if (board[x][y] == board[x-1][y] && board[x][y] == board[x+1][y]) {
+					flag = true;
+				}
+			}
+
+			if ((x - 2) >= 0) {
+				if (board[x][y] == board[x-1][y] && board[x][y] == board[x-2][y]) {
+					flag = true;
+				}
+			}
+
+			return flag;
+		}
+
+		data_after_change_player = function(current_player) {
+			var data = {};
+			if (current_player == 1) {
+				data = {
+					current_player: 2,
+					value: 2
+				}
+			} else if (current_player == 2) {
+				data = {
+					current_player: 1,
+					value: 1
+				}
+			}
+
+			return data;
+		}
+	</script>
+
+	<script type="text/javascript">
+		let board = [];
+
+		for (let i=0; i<width; i++) {
+			board.push([0,0]);
+		}
+
+		let table = $("<table>").addClass("main_table");
+
+		for (let i=0; i<width; i++) {
+			let row = $("<tr>").addClass("table_row");
+			for (let j=0; j<width; j++) {
+				let cell = $("<td>").addClass("table_cell");
+				let input = $("<input>").addClass("cell " + "cell" + i + j).attr({ type: "button", dimension_1: i, dimension_2: j });
+				cell.append(input);
+				row.append(cell);
+			}
+			table.append(row);
+		}
+
+		$("#root").append(table)
+
+		$(".cell").on("click", function() {
+			let x = $(this).attr("dimension_1");
+			let y = $(this).attr("dimension_2");
+			$(this).attr({disabled: true});
+
+			data = data_after_change_player(current_player)
+			current_player = data["current_player"];
+			$(this).val(data["value"]);
+			board[x][y] = data["value"];
+			current_position = {
+				x: x,
+				y: y
+			}
+			check_winner(board, current_position);
+
+		});
+
+	</script>
+
+	
+</html>
