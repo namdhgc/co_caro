@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Game cờ caro</title>
+		<title>Cờ caro</title>
 	</head>
 
 	<style>
@@ -25,25 +25,63 @@
 			let x = parseInt(current_position["x"]);
 			let y = parseInt(current_position["y"]);
 
-			if (check_diagonal_line_winner(board, x, y)) {
+			if (check_straight_line_winner(board, x, y) || check_diagonal_line_winner(board, x, y)) {
 				alert("Player " + current_player + " win!")
 			}
-			// if (check_straight_line_winner(board, current_position) || check_diagonal_line_winner(board, current_position)) {
-			// 	alert('win');
-			// }
-
 		}
 
 		check_straight_line_winner = function(board, x, y) {
 			// check theo duong thang
 			let flag = false;
 
-			if (board[x][y] == board[x][y+1] && board[x][y] == board[x][y+2]
-				|| board[x][y] == board[x][y-1] && board[x][y] == board[x][y+1]
-				|| board[x][y] == board[x][y-1] && board[x][y] == board[x][y-2]
-				) {
-				flag = true;
+			if (y+2 < width) {
+				if (board[x][y] == board[x][y+1] && board[x][y] == board[x][y+2]) {
+					flag = true;
+				}
 			}
+
+
+			if (x+2 < width) {
+				if (board[x][y] == board[x+1][y] && board[x][y] == board[x+2][y]) {
+					flag = true;
+				}
+			}
+
+			if ((y-1) >= 0 && (y+1) < width) {
+				if (board[x][y] == board[x][y-1] && board[x][y] == board[x][y+1]) {
+					flag = true;
+				}
+			}
+
+			if ((x-1) >= 0 && (x+1) < width) {
+				if (board[x][y] == board[x-1][y] && board[x][y] == board[x+1][y]) {
+					flag = true;
+				}
+			}
+
+			if (y-2 >= 0) {
+				if (board[x][y] == board[x][y-1] && board[x][y] == board[x][y-2]) {
+					flag = true;
+				}
+			}
+
+			if (x-2 >= 0) {
+				if (board[x][y] == board[x-1][y] && board[x][y] == board[x-2][y]) {
+					flag = true;
+				}
+			}
+
+				// if (board[x][y] == board[x][y+1] && board[x][y] == board[x][y+2]
+				// 	|| board[x][y] == board[x+1][y] && board[x][y] == board[x+2][y]
+
+				// 	|| board[x][y] == board[x][y-1] && board[x][y] == board[x][y+1]
+				// 	|| board[x][y] == board[x-1][y] && board[x][y] == board[x+1][y]
+
+				// 	|| board[x][y] == board[x][y-1] && board[x][y] == board[x][y-2]
+				// 	|| board[x][y] == board[x-1][y] && board[x][y] == board[x-2][y]
+				// ) {
+				// 	flag = true;
+				// }
 
 			return flag;
 		}
@@ -51,28 +89,57 @@
 		check_diagonal_line_winner = function(board, x, y) {
 			// check theo duong cheo
 			let flag = false;
-			console.log("===========================")
-			console.log(board)
-			console.log(x)
-			console.log(y)
 
-			if ((x + 2) <= width) {
-				if (board[x][y] == board[x+1][y] && board[x][y] == board[x+2][y]) {
+			if ((x+2) < width && (y+2) < width) {
+				if (board[x][y] == board[x+1][y+1] && board[x][y] == board[x+2][y+2]) {
 					flag = true;
 				}
 			}
 
-			if ((x - 1) >= 0 && (x + 1) <= width) {
-				if (board[x][y] == board[x-1][y] && board[x][y] == board[x+1][y]) {
+			if ((x+1) < width && (y+1) < width && (x-1) >= 0 && (y-1) >= 0) {
+				if (board[x][y] == board[x+1][y+1] && board[x][y] == board[x-1][y-1]) {
+					flag = true;
+				}
+
+				if (board[x][y] == board[x+1][y-1] && board[x][y] == board[x-1][y+1]) {
 					flag = true;
 				}
 			}
 
-			if ((x - 2) >= 0) {
-				if (board[x][y] == board[x-1][y] && board[x][y] == board[x-2][y]) {
+			if ((x-2) >= 0 && (y-2) >= 0) {
+				if (board[x][y] == board[x-1][y-1] && board[x][y] == board[x-2][y-2]) {
 					flag = true;
 				}
 			}
+
+			if ((x-2) >= 0 && (y+2) < width) {
+				if (board[x][y] == board[x-1][y+1] && board[x][y] == board[x-2][y+2]) {
+					flag = true;
+				}
+			}
+
+			if ((x+2) < width && (y-2) >= 0) {
+				if (board[x][y] == board[x+1][y-1] && board[x][y] == board[x+2][y-2]) {
+					flag = true;
+				}
+			}
+
+			// if (board[x][y] == board[x+1][y+1] && board[x][y] == board[x+2][y+2]
+			// 	|| board[x][y] == board[x+1][y+1] && board[x][y] == board[x-1][y-1]
+			// 	|| board[x][y] == board[x-1][y-1] && board[x][y] == board[x-2][y-2]
+
+			// 	|| board[x][y] == board[x-1][y+1] && board[x][y] == board[x-2][y+2]
+			// 	|| board[x][y] == board[x+1][y-1] && board[x][y] == board[x-1][y+1]
+			// 	|| board[x][y] == board[x+1][y-1] && board[x][y] == board[x+2][y-2]
+			// 	) {
+			// 	flag = true;
+			// }
+
+			// 00  01  02
+
+			// 10  11  12
+
+			// 20  21  22
 
 			return flag;
 		}
@@ -99,7 +166,7 @@
 		let board = [];
 
 		for (let i=0; i<width; i++) {
-			board.push([0,0]);
+			board.push([0,0,0]);
 		}
 
 		let table = $("<table>").addClass("main_table");
